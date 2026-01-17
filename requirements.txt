@@ -1,0 +1,2 @@
+SQLAlchemy == 2.0.0
+SQLite == 3.51.2
