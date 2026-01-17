@@ -27,11 +27,24 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     if request.method == 'POST':
-        
         username = request.form.get("username")
         password = request.form.get("password")
         email = request.form.get("email")
+        # VERİ DOĞRULAMA (Validation)
+        # Strip() fonksiyonu ile sadece boşluk tuşuna basıp göndermesini de engelleriz.
+        if not username or not password or not email:
+            return render_template('register.html', error="Lütfen tüm alanları doldurun!")
+    
+        if len(username.strip()) < 3:
+            return render_template('register.html', error="Kullanıcı adı en az 3 karakter olmalı!")
+        if len(password.strip()) < 6:
+            return render_template('register.html', error="Şifre en az 6 karakter olmalı!")
+        # 1. ÖNCE KONTROL (Kullanıcıya nazikçe bilgi vermek için)
+        if User.query.filter_by(username=username).first():
+            return render_template('register.html', error="Bu kullanıcı adı zaten alınmış.")
 
+        if User.query.filter_by(email=email).first():
+            return render_template('register.html', error="Bu e-posta zaten kullanımda.")
         new_user = User(
             username=username,
             email=email,
