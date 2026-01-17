@@ -3,7 +3,7 @@
 {% block body %}
     <p>This is the home page of the Flashcards App.</p>
     {% if user %}
-        <p>Welcome back, {{ user.username }}! <a href="/logout">logout</a></p>
+        <p>Welcome back, {{ user.username }}! <a href="{{ url_for('logout') }}">logout</a></p>
     {% endif %}
     <p></p>
 {% endblock %}
