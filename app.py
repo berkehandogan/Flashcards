@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, abort, render_template, request, redirect, url_for
 from models import db, User, Deck, Card
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -100,10 +100,38 @@ def create_deck():
             return f"Bir hata oluştu: {e}"
     return render_template('create_deck.html')
 
+@app.route('/deck/<int:deck_id>')
+@login_required
+def deck_detail(deck_id):
+    deck = Deck.query.get_or_404(deck_id)
+    if deck.user_id != current_user.id:
+        abort(403, description="Bu desteye erişim izniniz yok.")
+    return render_template('deck_detail.html', deck=deck)
+
+@app.route('/deck/<int:deck_id>/add-card', methods=['GET', 'POST'])
+@login_required
+def add_card(deck_id):
+    deck = Deck.query.get_or_404(deck_id)
+    if deck.user_id != current_user.id:
+        abort(403, description="Bu desteye erişim izniniz yok.")
+
+    if request.method == 'POST':
+        front = request.form.get("front")
+        back = request.form.get("back")
+        if not front or not back:
+            return render_template('deck_detail.html', deck=deck, error="Lütfen her iki tarafı da doldurun!")
+        new_card = Card(front=front, back=back, deck_id=deck.id)
+        try:
+            db.session.add(new_card)
+            db.session.commit()
+            return redirect(url_for("deck_detail", deck_id=deck.id))
+        except Exception as e:
+            db.session.rollback()
+            return f"Bir hata oluştu: {e}"
+    return render_template('add_card.html', deck=deck)
+
+
 with app.app_context():
     db.create_all()
 if __name__ == '__main__':
     app.run()
-
-
-

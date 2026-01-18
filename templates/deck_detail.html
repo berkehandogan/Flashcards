@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    
+    <a href="{{ url_for('index') }}">← Back to Decks</a>
+    <h2>Deck: {{ deck.name }}</h2>
+    <hr>
+
+    <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <h4>Add New Card</h4>
+        <form action="{{ url_for('add_card', deck_id=deck.id) }}" method="POST">
+            <input type="text" name="front" placeholder="Front Side (Question)" required style="width: 40%;">
+            <input type="text" name="back" placeholder="Back Side (Answer)" required style="width: 40%;">
+            <button type="submit">Add Card</button>
+        </form>
+    </div>
+
+    <h3>Cards inside this deck:</h3>
+    
+    {% if deck.cards %}
+        <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Front</th>
+                    <th>Back</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for card in deck.cards %}
+                <tr>
+                    <td>{{ card.front }}</td>
+                    <td>{{ card.back }}</td>
+                    <td>
+                        <small><a href="#" style="color: red;">Delete</a></small>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>This deck is empty. Add some cards above!</p>
+    {% endif %}
+
+{% endblock %}
