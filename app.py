@@ -1,4 +1,4 @@
-from flask import Flask, abort, render_template, request, redirect, url_for
+from flask import Flask, abort, flash, render_template, request, redirect, url_for
 from models import db, User, Deck, Card
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -180,6 +180,39 @@ def review_card(deck_id, card_id, action):
 
     # Bir sonraki karta geçmek için study sayfasına geri dön
     return redirect(url_for('study', deck_id=deck_id))
+
+@app.route('/deck/<int:deck_id>/delete', methods=['POST'])
+@login_required
+def delete_deck(deck_id):
+    deck = Deck.query.get_or_404(deck_id)
+    if deck.user_id != current_user.id:
+        abort(403, description="Bu desteye erişim izniniz yok.")
+    try:
+        db.session.delete(deck)
+        db.session.commit()
+        flash(f"'{deck.name}' destesi ve içindeki tüm kartlar silindi.")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Delete hatası: {e}")
+        return "Veritabanı silinirken bir hata oluştu.", 500
+    return redirect(url_for("index"))
+
+@app.route('/card/<int:card_id>/delete', methods=['POST'])
+@login_required
+def delete_card(card_id):
+    card = Card.query.get_or_404(card_id)
+    deck = Deck.query.get(card.deck_id)
+    if deck.user_id != current_user.id:
+        abort(403, description="Bu karta erişim izniniz yok.")
+    try:
+        db.session.delete(card)
+        db.session.commit()
+        flash("Kart silindi.")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Delete hatası: {e}")
+        return "Veritabanı silinirken bir hata oluştu.", 500
+    return redirect(url_for("deck_detail", deck_id=deck.id))
 
 with app.app_context():
     db.create_all()

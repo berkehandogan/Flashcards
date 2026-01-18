@@ -16,7 +16,7 @@ class Deck(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    cards = db.relationship('Card', backref='deck', lazy=True)
+    cards = db.relationship('Card', backref='deck', lazy=True, cascade="all, delete-orphan")
     
 class Card(db.Model):
     __tablename__ = 'card'

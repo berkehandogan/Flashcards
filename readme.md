@@ -35,4 +35,23 @@ Uygulama arka planda kartları 5 farklı "Kutu" (Box) içinde yönetir:
 
 *Kullanıcı bir kartı "Hatırladım" dediğinde kart bir sonraki kutuya geçer. "Hatırlamadım" dediğinde ise kart acımasızca Kutu 1'e geri düşer.*
 
+### 📸 Ekran Görüntüleri
 
+#### 1. Giriş ve Kayıt İşlemleri
+![Giriş Ekranı](img/Login.png)
+![Kayıt Ol Ekranı](img/Signup.png)
+
+#### 2. Ana Sayfa (Dashboard)
+![Ana Sayfa - Boş Hali](img/Homepage.png)
+![Ana Sayfa - Desteler Eklenmiş](img/Homepagewith_deck.png)
+
+#### 3. Deste ve Kart Yönetimi
+![Yeni Deste Oluşturma](img/Create_deck.png)
+![Deste Detayı - Henüz Kart Yok](img/Detail_deckwithout_card.png)
+![Deste Detayı - Kartlar Eklenmiş](img/Detail_deck.png)
+![Deste Silme İşlemi](img/Delete_deck.png)
+
+#### 4. Çalışma Modu (Leitner Sistemi)
+![Kartın Ön Yüzü (Soru)](img/Front.png)
+![Kartın Arka Yüzü (Cevap Açık)](img/Front_and_back.png)
+![Çalışma Tamamlandı](img/Finish_cards.png)
