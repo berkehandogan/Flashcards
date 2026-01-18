@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+from datetime import datetime
 db = SQLAlchemy()
 
 class User(db.Model, UserMixin):
@@ -23,3 +24,5 @@ class Card(db.Model):
     front = db.Column(db.String(200), nullable=False)
     back = db.Column(db.String(200), nullable=False)
     deck_id = db.Column(db.Integer, db.ForeignKey('deck.id'), nullable=False)
+    box = db.Column(db.Integer, default=1)  # Leitner kutusu numarası
+    next_review = db.Column(db.DateTime, default=datetime.now)

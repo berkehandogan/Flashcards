@@ -2,6 +2,7 @@ from flask import Flask, abort, render_template, request, redirect, url_for
 from models import db, User, Deck, Card
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'bura_cok_gizli_bir_seyler_yaz'
@@ -130,6 +131,55 @@ def add_card(deck_id):
             return f"Bir hata oluştu: {e}"
     return render_template('add_card.html', deck=deck)
 
+@app.route('/deck/<int:deck_id>/study')
+@login_required
+def study(deck_id):
+    deck = Deck.query.get_or_404(deck_id)
+    if deck.user_id != current_user.id:
+        abort(403, description="Bu desteye erişim izniniz yok.")
+    card = Card.query.filter(Card.deck_id == deck.id, Card.next_review <= datetime.now()).first()
+    if not card:
+        return render_template('study.html', deck=deck, isFinished=True)
+    
+    return render_template('study.html', card=card, deck=deck, isFinished=False)
+
+@app.route('/deck/<int:deck_id>/review/<int:card_id>/<string:action>')
+@login_required
+def review_card(deck_id, card_id, action):
+    deck = Deck.query.get_or_404(deck_id)
+    card = Card.query.get_or_404(card_id)
+    if deck.user_id != current_user.id:
+        abort(403, description="Bu desteye erişim izniniz yok.")
+
+    if action == 'success': # Bildiyse kutuyu arttır (Seviye atla)
+        card.box += 1
+        # Kutuna göre mola süresi
+        if card.box == 2:
+            delay = 3   # 3 gün sonra
+        elif card.box == 3:
+            delay = 7   # 1 hafta sonra
+        elif card.box == 4:
+            delay = 14  # 2 hafta sonra
+        elif card.box >= 5:
+            delay = 30  # 1 ay sonra
+        else:
+            delay = 1
+        # Tarihi ileri at
+        card.next_review = datetime.now() + timedelta(days=delay)
+        
+    elif action == 'fail': # Bilemediyse en başa, 1. kutuya döner.
+        card.box = 1
+        card.next_review = datetime.now()
+
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print(f"Update hatası: {e}") 
+        return "Veritabanı güncellenirken bir hata oluştu.", 500
+
+    # Bir sonraki karta geçmek için study sayfasına geri dön
+    return redirect(url_for('study', deck_id=deck_id))
 
 with app.app_context():
     db.create_all()

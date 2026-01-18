@@ -5,9 +5,28 @@
     {% if error %}
         <p style="color: red;">{{ error }}</p>
     {% endif %}
+
     <form method="POST" action="{{ url_for('login') }}">
-        <input type="text" id="username" name="username" required placeholder="Username"><br><br>
-        <input type="password" id="password" name="password" required placeholder="Password"><br><br>
-        <button type="submit">Login</button>
+        
+        <div style="margin-bottom: 15px;">
+            <input type="text" id="username" name="username" required placeholder="Username" style="display: block; margin-bottom: 10px;">
+            <input type="password" id="password" name="password" required placeholder="Password" style="display: block;">
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+            
+            <button type="submit" style="background-color: #007bff; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">
+                Login
+            </button>
+
+            <a href="{{ url_for('register') }}" style="text-decoration: none;">
+                <button type="button" style="background-color: #6c757d; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">
+                    Register
+                </button>
+            </a>
+
+        </div>
+
     </form>
+    
 {% endblock %}

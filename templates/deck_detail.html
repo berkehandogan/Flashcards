@@ -9,7 +9,28 @@
     <a href="{{ url_for('index') }}">← Back to Decks</a>
     <h2>Deck: {{ deck.name }}</h2>
     <hr>
-
+    <div style="margin: 20px 0;">
+        {% if deck.cards %}
+            <a href="{{ url_for('study', deck_id=deck.id) }}" style="text-decoration: none;">
+                <button style="
+                    background-color: #28a745; 
+                    color: white; 
+                    padding: 10px 20px; 
+                    border: none; 
+                    border-radius: 5px; 
+                    cursor: pointer; 
+                    font-size: 16px;
+                    font-weight: bold;">
+                    ▶ Study Deck ({{ deck.cards|length }} Cards)
+                </button>
+            </a>
+        {% else %}
+            <span style="color: gray; font-style: italic;">
+                * Çalışmaya başlamak için önce aşağıdan kart ekleyin.
+            </span>
+        {% endif %}
+    </div>
+    <hr>
     <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
         <h4>Add New Card</h4>
         <form action="{{ url_for('add_card', deck_id=deck.id) }}" method="POST">

@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <h2> Studying : {{ deck.name }}</h2>
+    <a href="{{ url_for('deck_detail', deck_id = deck.id) }}">← Back to Deck</a>
+
+    {% if isFinished %}
+       <div style="text-align: center; margin-top: 50px;">
+            <h1 style="color: green;">Tebrikler! 🎉</h1>
+            <p>Bugünlük çalışman gereken tüm kartları bitirdin.</p>
+            <p>Yarın veya kartların zamanı gelince tekrar gel.</p>
+            <a href="{{ url_for('index') }}"><button>Ana Sayfaya Dön</button></a>
+        </div>
+    {% else %}
+        <div style="border: 2px solid #333; padding: 40px; text-align: center; margin: 20px auto; width: 50%;">
+            
+            <p>Kutu Seviyesi: {{ card.box }}</p>
+
+            <h1 style="color: blue;">{{ card.front }}</h1>
+            
+            <hr>
+
+            <div id="answer-div" style="display: none;">
+                <h1 style="color: green;">{{ card.back }}</h1>
+                <br>
+                <p>Bu kartı hatırladın mı?</p>
+                
+                <a href="{{ url_for('review_card', deck_id=deck.id, card_id=card.id, action='fail') }}">
+                    <button style="background-color: red; color: white; padding: 10px;">❌ Hatırlamadım</button>
+                </a>
+
+                <a href="{{ url_for('review_card', deck_id=deck.id, card_id=card.id, action='success') }}">
+                    <button style="background-color: green; color: white; padding: 10px;">✅ Hatırladım</button>
+                </a>
+            </div>
+
+            <br>
+            <button onclick="showAnswer()" id="show-btn" style="padding: 10px 20px;">Cevabı Göster</button>
+
+        </div>
+    {% endif %}
+        <script>
+        function showAnswer() {
+            document.getElementById('answer-div').style.display = 'block';
+            document.getElementById('show-btn').style.display = 'none';
+        }
+    </script>
+{% endblock %}
