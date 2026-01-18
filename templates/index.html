@@ -2,8 +2,25 @@
 
 {% block body %}
     <p>This is the home page of the Flashcards App.</p>
+    
     {% if user %}
         <p>Welcome back, {{ user.username }}! <a href="{{ url_for('logout') }}">logout</a></p>
+        
+        <h3>Your Decks:</h3>
+        <a href="{{ url_for('create_deck') }}">+ New Deck</a>
+        {% if user.decks %}
+            <ul>
+                {% for deck in user.decks %}
+                    <li><a href="{{ url_for('deck_detail', deck_id=deck.id) }}">
+                            {{ deck.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You don't have any decks yet.</p>
+        {% endif %}
+
     {% endif %}
-    <p></p>
+    
 {% endblock %}

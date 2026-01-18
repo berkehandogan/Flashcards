@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h2>Create Deck</h2>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="POST" action="{{ url_for('create_deck') }}">
+        <input type="text" id="name" name="name" required placeholder="Deck Name"><br><br>
+        <button type="submit">Create Deck</button>
+    </form>
+{% endblock %}

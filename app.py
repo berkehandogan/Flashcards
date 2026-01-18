@@ -83,6 +83,22 @@ def logout():
     logout_user()
     return redirect("/login")
 
+@app.route('/create-deck', methods=['GET', 'POST'])
+@login_required
+def create_deck():
+    if request.method == 'POST':
+        name = request.form.get("name")
+        if not name or len(name.strip()) < 3:
+            return render_template('create_deck.html', error="Deste adı en az 3 karakter olmalı!")
+        new_deck = Deck(name=name, user_id=current_user.id)
+        try:
+            db.session.add(new_deck)
+            db.session.commit()
+            return redirect(url_for("index"))
+        except Exception as e:
+            db.session.rollback()
+            return f"Bir hata oluştu: {e}"
+    return render_template('create_deck.html')
 
 with app.app_context():
     db.create_all()
