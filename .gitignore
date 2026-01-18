@@ -1,5 +1,13 @@
 venv/
+env/
+.env
+anaconda3/
+
 __pycache__/
+*.pyc
+
 instance/
 *.db
-.DS_Store
+
+.vscode/
+.idea/

@@ -1,53 +1,73 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
-
-    <h2> Studying : {{ deck.name }}</h2>
-    <a href="{{ url_for('deck_detail', deck_id = deck.id) }}">← Back to Deck</a>
+<div class="container mt-4">
+    
+    <div class="mb-3 text-center">
+        <a href="{{ url_for('deck_detail', deck_id=deck.id) }}" class="text-decoration-none text-muted">Çalışmayı Bitir ve Dön</a>
+    </div>
 
     {% if isFinished %}
-       <div style="text-align: center; margin-top: 50px;">
-            <h1 style="color: green;">Tebrikler! 🎉</h1>
-            <p>Bugünlük çalışman gereken tüm kartları bitirdin.</p>
-            <p>Yarın veya kartların zamanı gelince tekrar gel.</p>
-            <a href="{{ url_for('index') }}"><button>Ana Sayfaya Dön</button></a>
-        </div>
-    {% else %}
-        <div style="border: 2px solid #333; padding: 40px; text-align: center; margin: 20px auto; width: 50%;">
-            
-            <p>Kutu Seviyesi: {{ card.box }}</p>
-
-            <h1 style="color: blue;">{{ card.front }}</h1>
-            
-            <hr>
-
-            <div id="answer-div" style="display: none;">
-                <h1 style="color: green;">{{ card.back }}</h1>
-                <br>
-                <p>Bu kartı hatırladın mı?</p>
-                
-                <a href="{{ url_for('review_card', deck_id=deck.id, card_id=card.id, action='fail') }}">
-                    <button style="background-color: red; color: white; padding: 10px;">❌ Hatırlamadım</button>
-                </a>
-
-                <a href="{{ url_for('review_card', deck_id=deck.id, card_id=card.id, action='success') }}">
-                    <button style="background-color: green; color: white; padding: 10px;">✅ Hatırladım</button>
-                </a>
+        <div class="card shadow text-center p-5 border-0">
+            <div class="card-body">
+                <h1 class="display-1 mb-4">🎉</h1>
+                <h2 class="card-title text-success">Harika İş Çıkardın!</h2>
+                <p class="lead text-muted">Bugünlük çalışman gereken tüm kartları tamamladın.</p>
+                <hr>
+                <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg mt-3">Ana Sayfaya Dön</a>
             </div>
+        </div>
 
-            <br>
-            <button onclick="showAnswer()" id="show-btn" style="padding: 10px 20px;">Cevabı Göster</button>
+    {% else %}
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                
+                <div class="card shadow-lg border-0 text-center" style="min-height: 400px;">
+                    
+                    <div class="card-header bg-white border-bottom-0 pt-4">
+                        <span class="badge bg-info text-dark">Kutu Seviyesi: {{ card.box }}</span>
+                        <h5 class="text-muted mt-2">{{ deck.name }}</h5>
+                    </div>
 
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        
+                        <h1 class="display-4 fw-bold text-primary mb-4">{{ card.front }}</h1>
+                        
+                        <div id="answer-div" style="display: none; width: 100%;">
+                            <hr class="w-50 mx-auto mb-4">
+                            <h2 class="text-success mb-5">{{ card.back }}</h2>
+                            
+                            <p class="text-muted mb-3">Hatırladın mı?</p>
+                            
+                            <div class="d-flex justify-content-center gap-3">
+                                <a href="{{ url_for('review_card', deck_id=deck.id, card_id=card.id, action='fail') }}" class="btn btn-danger btn-lg px-4">
+                                    ❌ Hatırlamadım
+                                </a>
+                                <a href="{{ url_for('review_card', deck_id=deck.id, card_id=card.id, action='success') }}" class="btn btn-success btn-lg px-4">
+                                    ✅ Hatırladım
+                                </a>
+                            </div>
+                        </div>
+
+                        <button onclick="showAnswer()" id="show-btn" class="btn btn-outline-dark btn-lg mt-4 px-5">
+                            Cevabı Göster 👁️
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
     {% endif %}
-        <script>
-        function showAnswer() {
-            document.getElementById('answer-div').style.display = 'block';
-            document.getElementById('show-btn').style.display = 'none';
-        }
-    </script>
+
+</div>
+
+<script>
+    function showAnswer() {
+        // Cevap alanını aç (slide efekti olmadan direkt görünür yapar)
+        document.getElementById('answer-div').style.display = 'block';
+        // Butonu gizle
+        document.getElementById('show-btn').style.display = 'none';
+    }
+</script>
 {% endblock %}

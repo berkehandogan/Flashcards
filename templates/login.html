@@ -1,32 +1,38 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <h2>Login</h2>
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
-
-    <form method="POST" action="{{ url_for('login') }}">
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
         
-        <div style="margin-bottom: 15px;">
-            <input type="text" id="username" name="username" required placeholder="Username" style="display: block; margin-bottom: 10px;">
-            <input type="password" id="password" name="password" required placeholder="Password" style="display: block;">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white text-center">
+                <h4>Giriş Yap</h4>
+            </div>
+            <div class="card-body p-4">
+                
+                {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Kullanıcı Adı</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Şifre</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Giriş Yap</button>
+                        <a href="{{ url_for('register') }}" class="btn btn-outline-secondary">Hesap Oluştur</a>
+                    </div>
+                </form>
+
+            </div>
         </div>
-
-        <div style="display: flex; gap: 10px; align-items: center;">
-            
-            <button type="submit" style="background-color: #007bff; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">
-                Login
-            </button>
-
-            <a href="{{ url_for('register') }}" style="text-decoration: none;">
-                <button type="button" style="background-color: #6c757d; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">
-                    Register
-                </button>
-            </a>
-
         </div>
-
-    </form>
-    
+</div>
 {% endblock %}

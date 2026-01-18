@@ -1,14 +1,44 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <h2>Register</h2>
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
-    <form method="POST" action="{{ url_for('register') }}">
-        <input type="text" id="username" name="username" required placeholder="Username"><br><br>
-        <input type="text" id="email" name="email" required placeholder="Email"><br><br>
-        <input type="password" id="password" name="password" required placeholder="Password"><br><br>
-        <button type="submit">Register</button>
-    </form>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white text-center">
+                <h4>Kayıt Ol</h4>
+            </div>
+            <div class="card-body p-4">
+                
+                {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <form method="POST" action="{{ url_for('register') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Kullanıcı Adı</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Örn: berkehan" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-Posta Adresi</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="ornek@email.com" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Şifre (En az 6 karakter)</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">Hesap Oluştur</button>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">Zaten hesabın var mı? Giriş Yap</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}
